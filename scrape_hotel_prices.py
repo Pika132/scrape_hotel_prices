@@ -5,11 +5,10 @@ import time
 
 def get_next_days():
     today = datetime.today()
-    dates = [(today + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)]
+    dates = [(today + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(2)]
     return dates
 
 def get_hotel_names():
-    # Return a fixed list of hotel names
     return [
         "ibis Melbourne - Glen Waverley"
     ]
@@ -24,8 +23,14 @@ def main():
     with sync_playwright() as p:
         dates = get_next_days()
         price_data = []
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+        browser = p.chromium.launch(
+            headless=True, 
+            args=["--no-sandbox", "--disable-gpu", "--start-maximized", "--window-size=1920x1080"]
+        )  # Run headless with options
+        context = browser.new_context(
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        )  # Set a real user-agent
+        page = context.new_page()
 
         for checkin_date in dates:
             checkout_date = (datetime.strptime(checkin_date, '%Y-%m-%d') + timedelta(days=1)).strftime('%Y-%m-%d')
@@ -37,21 +42,21 @@ def main():
                 max_retries = 3
                 for attempt in range(max_retries):
                     try:
-                        # Shortened timeout values
-                        page.goto(page_url, timeout=30000)  # 30 seconds
-                        time.sleep(1)  # Shorter sleep time     
+                        page.goto(page_url, wait_until="domcontentloaded")  # Wait for DOMContentLoaded event
+                        time.sleep(3)  # Optional: Wait for dynamic content to load
 
-                        page.wait_for_selector('//div[@data-testid="property-card"]', timeout=5000)  # 10 seconds
+                        # Ensure the price element is available
+                        page.wait_for_selector('//div[@data-testid="property-card"]', timeout=20000)  # Wait for property cards
                         hotel = page.locator('//div[@data-testid="property-card"]').first
 
                         price = hotel.locator('//span[@data-testid="price-and-discounted-price"]').inner_text()
                         row_data[f'{hotel_name}'] = price
                         break  # Exit the retry loop if successful
                     except Exception as e:
-                        if attempt < max_retries - 1:  # If not the last attempt
+                        if attempt < max_retries - 1:
                             print(f"Attempt {attempt + 1} failed for {hotel_name} on {checkin_date}: {e}. Refreshing page...")
-                            page.reload()  # Refresh the page
-                            time.sleep(1)  # Shorter wait time before retrying
+                            page.reload()
+                            time.sleep(1)
                         else:
                             row_data[f'{hotel_name}'] = 'N/A'
                             print(f"Error extracting price for {hotel_name} on {checkin_date}: {e}")
