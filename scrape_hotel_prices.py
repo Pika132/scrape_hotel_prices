@@ -5,12 +5,13 @@ import time
 
 def get_next_days():
     today = datetime.today()
-    dates = [(today + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(2)]
+    dates = [(today + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)]
     return dates
 
 def get_hotel_names():
     return [
-        "ibis Melbourne - Glen Waverley"
+        "ibis Melbourne - Glen Waverley", 
+        "Hotel Chadstone Melbourne, MGallery" 
     ]
 
 def main():
