@@ -62,8 +62,6 @@ def main():
         df.to_excel('daily_price_multiple_hotels.xlsx', index=False)
 
         browser.close()
-    
-    messagebox.showinfo("Completed", "Data scraping complete and saved as 'daily_price_multiple_hotels.xlsx'.")
 
 if __name__ == '__main__':
     main()
