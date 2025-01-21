@@ -24,7 +24,7 @@ def main():
     with sync_playwright() as p:
         dates = get_next_days()
         price_data = []
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
 
         for checkin_date in dates:
