@@ -37,7 +37,7 @@ jobs:
 
     # Upload the result (Excel file) as an artifact
     - name: Upload price data
-      uses: actions/upload-artifact@v3  # Update to v3
+      uses: actions/upload-artifact@v4  # Update to v4
       with:
-        name: hotel-price-data
-        path: daily_price_multiple_hotels.xlsx
+        name: hotel-price-data  # Artifact name
+        path: daily_price_multiple_hotels.xlsx  # File to upload
