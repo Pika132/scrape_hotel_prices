@@ -10,18 +10,18 @@ on:
 
 jobs:
   scrape_prices:
-    runs-on: ubuntu-latest  # You can use ubuntu-22.04 if preferred
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
 
     steps:
     # Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Set up Python 3.x
+    # Set up Python
     - name: Set up Python 3.x
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v2
       with:
-        python-version: '3.9'
+        python-version: '3.9'  # Or use the version required by your project
 
     # Install dependencies
     - name: Install dependencies
@@ -29,16 +29,15 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         python -m playwright install  # Install Playwright browser binaries
-        sudo apt-get install -y xvfb  # Install Xvfb for virtual display
 
-    # Run scraping script in headless mode with Xvfb
+    # Run the scraping script
     - name: Run scraping script
       run: |
-        xvfb-run -a python scrape_hotel_prices.py  # Run script with Xvfb (to simulate a display)
+        python scrape_hotel_prices.py  # Make sure this matches your script name
 
     # Upload the result (Excel file) as an artifact
     - name: Upload price data
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3  # Update to v3
       with:
         name: hotel-price-data
-        path: daily_price_multiple_hotels.xlsx  # Path to the output file
+        path: daily_price_multiple_hotels.xlsx
