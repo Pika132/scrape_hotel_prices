@@ -1,16 +1,6 @@
-name: Hotel Price Scraping
-
-on:
-  schedule:
-    - cron: '*/10 * * * *'  # Run the action every 10 minutes
-  push:
-    branches:
-      - main  # Trigger the action on push to the main branch
-  workflow_dispatch:  # Allow manual trigger of the workflow
-
 jobs:
   scrape_prices:
-    runs-on: ubuntu-22.04  # Explicitly specify the version
+    runs-on: ubuntu-latest  # Or use a specific Ubuntu version
 
     steps:
     # Checkout the repository
@@ -21,7 +11,7 @@ jobs:
     - name: Set up Python 3.x
       uses: actions/setup-python@v2
       with:
-        python-version: '3.9'  # Or use the version required by your project
+        python-version: '3.9'
 
     # Install dependencies
     - name: Install dependencies
@@ -29,15 +19,16 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         python -m playwright install  # Install Playwright browser binaries
+        sudo apt-get install -y xvfb  # Install X virtual framebuffer
 
-    # Run the scraping script
-    - name: Run scraping script
+    # Run scraping script with xvfb-run
+    - name: Run scraping script with Xvfb
       run: |
-        python scrape_hotel_prices.py  # Make sure this matches your script name
+        xvfb-run -a python scrape_hotel_prices.py  # Run your script using xvfb-run
 
     # Upload the result (Excel file) as an artifact
     - name: Upload price data
-      uses: actions/upload-artifact@v4  # Update to v4
+      uses: actions/upload-artifact@v4
       with:
-        name: hotel-price-data  # Artifact name
-        path: daily_price_multiple_hotels.xlsx  # File to upload
+        name: hotel-price-data
+        path: daily_price_multiple_hotels.xlsx
