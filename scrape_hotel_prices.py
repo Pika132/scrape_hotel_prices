@@ -11,11 +11,7 @@ def get_next_days():
 def get_hotel_names():
     # Return a fixed list of hotel names
     return [
-        "ibis Melbourne - Glen Waverley",
-        "Oros Hotel and Apartments",
-        "Art Series - The Chen",
-        "Rydges Ringwood",
-        "Hotel Chadstone Melbourne, MGallery"
+        "ibis Melbourne - Glen Waverley"
     ]
 
 def main():
