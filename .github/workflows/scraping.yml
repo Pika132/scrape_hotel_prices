@@ -1,0 +1,43 @@
+name: Hotel Price Scraping
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Run the action every 10 minutes
+  push:
+    branches:
+      - main  # Trigger the action on push to the main branch
+  workflow_dispatch:  # Allow manual trigger of the workflow
+
+jobs:
+  scrape_prices:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Set up Python
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'  # Or use the version required by your project
+
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        python -m playwright install  # Install Playwright browser binaries
+
+    # Run the scraping script
+    - name: Run scraping script
+      run: |
+        python scrape_hotel_prices.py  # Make sure this matches your script name
+
+    # Upload the result (Excel file) as an artifact
+    - name: Upload price data
+      uses: actions/upload-artifact@v2
+      with:
+        name: hotel-price-data
+        path: daily_price_multiple_hotels.xlsx
