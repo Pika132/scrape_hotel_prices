@@ -19,7 +19,7 @@ jobs:
 
     # Set up Python 3.x
     - name: Set up Python 3.x
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: '3.9'
 
@@ -29,11 +29,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         python -m playwright install  # Install Playwright browser binaries
+        sudo apt-get install -y xvfb  # Install Xvfb for virtual display
 
-    # Run scraping script in headless mode
+    # Run scraping script in headless mode with Xvfb
     - name: Run scraping script
       run: |
-        python scrape_hotel_prices.py  # Make sure this matches your script name
+        xvfb-run -a python scrape_hotel_prices.py  # Run script with Xvfb (to simulate a display)
 
     # Upload the result (Excel file) as an artifact
     - name: Upload price data
