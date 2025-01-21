@@ -10,7 +10,7 @@ on:
 
 jobs:
   scrape_prices:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    runs-on: ubuntu-22.04  # Explicitly specify the version
 
     steps:
     # Checkout the repository
