@@ -36,10 +36,11 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y xvfb
 
-    # Start Xvfb (virtual display)
+    # Start Xvfb without displaying the warnings
     - name: Start Xvfb
       run: |
-        Xvfb :99 -screen 0 1280x1024x24 & export DISPLAY=:99
+        Xvfb :99 -screen 0 1280x1024x24 & export DISPLAY=:99 2>/dev/null
+
 
     # Run the scraping script
     - name: Run scraping script
