@@ -2,11 +2,11 @@ name: Hotel Price Scraping
 
 on:
   schedule:
-    - cron: '0 */2 * * *'  # Run the action every 10 minutes
+    - cron: '0 */2 * * *'  # Run the action every 2 hours
   push:
     branches:
-      - main  # Trigger the action on push to the main branch
-  workflow_dispatch:  # Allow manual trigger of the workflow
+      - main  # Trigger on push to the main branch
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
   scrape_prices:
@@ -21,7 +21,7 @@ jobs:
     - name: Set up Python 3.x
       uses: actions/setup-python@v2
       with:
-        python-version: '3.9'  # Or use the version required by your project
+        python-version: '3.9'
 
     # Install dependencies
     - name: Install dependencies
@@ -36,20 +36,30 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y xvfb
 
-    # Start Xvfb without displaying the warnings
+    # Start Xvfb without displaying warnings
     - name: Start Xvfb
       run: |
         Xvfb :99 -screen 0 1280x1024x24 & export DISPLAY=:99 2>/dev/null
 
-
     # Run the scraping script
     - name: Run scraping script
       run: |
-        python scrape_hotel_prices.py  # Make sure this matches your script name
+        python scrape_hotel_prices.py  # Ensure the script name is correct
 
-    # Upload the result (Excel file) as an artifact
-    - name: Upload price data
-      uses: actions/upload-artifact@v3  # Update to v3
-      with:
-        name: hotel-price-data
-        path: daily_price_multiple_hotels.xlsx
+    # Check if the file exists before sending
+    - name: Check file existence
+      run: |
+        if [ -f daily_price_multiple_hotels.xlsx ]; then
+          echo "File exists, proceeding to send via Telegram."
+        else
+          echo "File not found. Exiting script."
+          exit 1
+        fi
+
+    # Send the file via Telegram using the script
+    - name: Send Excel file via Telegram
+      run: |
+        python send_telegram.py  # This will send the file via Telegram
+      env:
+        TELEGRAM_BOT_TOKEN: "7751308203:AAF_5lHsCIfb5Uo2ZM6FVHcnyofJKm1jwdA"  # Replace with your token
+        TELEGRAM_CHAT_ID: "-4647316485"    # Replace with your chat ID
