@@ -11,7 +11,10 @@ def get_next_days():
 def get_hotel_names():
     return [
         "ibis Melbourne - Glen Waverley", 
-        "Hotel Chadstone Melbourne, MGallery" 
+        "Hotel Chadstone Melbourne, MGallery",
+        "Avani Melbourne Box Hill Residences",
+        "Yarra Valley Motel",
+        "The Waverley International Hotel"
     ]
 
 def main():
@@ -47,7 +50,7 @@ def main():
                         time.sleep(3)  # Optional: Wait for dynamic content to load
 
                         # Ensure the price element is available
-                        page.wait_for_selector('//div[@data-testid="property-card"]', timeout=20000)  # Wait for property cards
+                        page.wait_for_selector('//div[@data-testid="property-card"]', timeout=10000)  # Wait for property cards
                         hotel = page.locator('//div[@data-testid="property-card"]').first
 
                         price = hotel.locator('//span[@data-testid="price-and-discounted-price"]').inner_text()
