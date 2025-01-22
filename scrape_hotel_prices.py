@@ -5,7 +5,7 @@ import time
 
 def get_next_days():
     today = datetime.today()
-    dates = [(today + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)]
+    dates = [(today + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(2)]
     return dates
 
 def get_hotel_names():
