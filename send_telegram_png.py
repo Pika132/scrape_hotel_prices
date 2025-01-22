@@ -34,7 +34,7 @@ def read_excel_and_create_image(file_path, image_path):
 
         # Set font size for table text
         table.auto_set_font_size(False)
-        table.set_fontsize(12)  # Adjust the font size to make the text bigger
+        table.set_fontsize(14)  # Adjust the font size to make the text bigger
 
         # Adjust the column width (optional)
         table.auto_set_column_width(col=list(range(len(df.columns))))  # Automatically adjust column widths
