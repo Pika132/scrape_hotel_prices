@@ -20,7 +20,7 @@ def read_excel_and_create_image(file_path, image_path):
         df = pd.read_excel(file_path)
 
         # Create a plot of the data
-        plt.figure(figsize=(32, 28))  # Adjust the figure size to make the table larger
+        plt.figure(figsize=(14, 10))  # Adjust the figure size to make the table larger
         plt.axis('off')  # Hide axes
 
         # Customize the table appearance
