@@ -2,7 +2,7 @@ name: Hotel Price Scraping
 
 on:
   schedule:
-    - cron: '0 8,20 * * *'  # Run the action every 2 hours
+    - cron: '0 9,11,20 * * *'  # Run the action every 2 hours
   push:
     branches:
       - main  # Trigger on push to the main branch
